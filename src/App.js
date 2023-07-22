@@ -12,32 +12,7 @@ const Substraction = lazy(() => import("./Components/Substraction"));
 
 function App() {
 
-  const range = 10;
-  const randomNumberMax = 10;
-
-  let addProblems = [];
-  for (let i = 0; i <= range; i++) {
-    addProblems.push({
-      top: getRandomInt(randomNumberMax),
-      bottom: getRandomInt(randomNumberMax),
-    });
-  }
-
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
-  }
-
-  let subproblems = [];
-  for (let i = 0; i <= range; i++) {
-    let top = getRandomInt(randomNumberMax);
-    let bottom = getRandomInt(randomNumberMax);
-
-    if (bottom > top) {
-      [top, bottom] = [bottom, top];
-    }
-    subproblems.push({ top, bottom, result: top - bottom, userInput: "" });
-  }
-
+  
   return (
     <>
       <Container>
@@ -46,12 +21,12 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route
-              path="/addition/:range/:problem"
-              element={<Addition problems={addProblems} />}
+              path="/addition/:range/:questions"
+              element={<Addition  />}
             />
             <Route
-              path="/substraction/:range/:problem"
-              element={<Substraction problems={subproblems} />}
+              path="/substraction/:range/:questions"
+              element={<Substraction  />}
             />
           </Routes>
         </Suspense>

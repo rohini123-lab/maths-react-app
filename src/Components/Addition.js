@@ -5,18 +5,50 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Button from "@mui/material/Button";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import TextField from "@mui/material/TextField";
-import { useNavigate } from "react-router-dom";
-import { useEffect, lazy, Suspense } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, lazy } from "react";
 
-const Confetti = lazy(() => import('react-confetti'));
+const Confetti = lazy(() => import("react-confetti"));
 
-function Addition({ problems }) {
+function Addition() {
+  const [errors, setErrors] = useState([]);
+  const [problems, setProblems] = useState([]);
+  const [showConfetti, setShowConfetti] = useState(false);
+  const navigate = useNavigate();
+
+  const { range } = useParams();
+  const { questions } = useParams();
+
   const [userInputs, setUserInputs] = useState(
     problems.map(() => ({ userAnswer: "" }))
   );
-  const [errors, setErrors] = useState([]);
-  const [showConfetti, setShowConfetti] = useState(false);
-  const navigate = useNavigate();
+  console.log(range);
+  useEffect(() => {
+    console.log("questions", questions);
+    const problems11 = [];
+    const problems12 = [];
+    for (let i = 0; i <= questions; i++) {
+      problems11.push({
+        top: Math.floor(Math.random() * range),
+        bottom: Math.floor(Math.random() * range),
+        userAnswer: "",
+      });
+      problems12.push({ userAnswer: "" });
+    }
+
+    setUserInputs(problems12);
+    setProblems(problems11);
+  }, [range, questions]);
+
+  useEffect(() => {
+    const allProblemsSolved =
+      errors.length >= 1 &&
+      errors.every((error) => {
+        return error === "correct";
+      });
+       setShowConfetti(allProblemsSolved);
+  }, [errors]);
+
   const handleInputChange = (event, index) => {
     const re = /^[0-9\b]+$/;
 
@@ -31,11 +63,8 @@ function Addition({ problems }) {
   const handleInputBlur = (event, index) => {
     const { top, bottom } = problems[index];
     const ans = top + bottom;
-    console.log("ans", ans);
     if (ans === parseInt(userInputs[index].userAnswer)) {
-      console.log("correct answer");
-    } else {
-      console.log("wrong answer");
+      } else {
     }
   };
   const handleSubmit = (event) => {
@@ -68,20 +97,22 @@ function Addition({ problems }) {
     return errors;
   };
   useEffect(() => {
-    // Check if all problems are solved
-    const allProblemsSolved = errors.length>=1 && errors.every((error) => {
-     console.log(error)
-      return error === "correct";
-    });
+    const allProblemsSolved =
+      errors.length >= 1 &&
+      errors.every((error) => {
+        console.log(error);
+        return error === "correct";
+      });
 
-    console.log('allProblemsSolved',allProblemsSolved)
+    console.log("allProblemsSolved", allProblemsSolved);
     setShowConfetti(allProblemsSolved);
+    setTimeout(()=>{
+      setShowConfetti(false)
+    },3000)
   }, [errors]);
-
 
   return (
     <>
-      
       <div style={{ margin: "10px 20px 10px 10px", minWidth: "50px" }}>
         <h2>Addition</h2>
         <Button
@@ -93,52 +124,58 @@ function Addition({ problems }) {
           <ArrowBackIosIcon />
           Back
         </Button>
-        <hr style={{ marginTop:'20px' }} />
-        <div style={{ display:'flex' }}>
-         
-        {errors.map((er, i) => (
-          <div key={i}>{er==='correct' ? <GradeIcon variant="contained" color="info"></GradeIcon> : '' }
-          </div>
-        ))}
-    
-          {showConfetti===true && (
-            <Confetti
-              width={window.innerWidth}
-              height={window.innerHeight}
-            />
+        <hr style={{ marginTop: "20px" }} />
+        <div style={{ display: "flex" }}>
+          {errors.map((er, i) => (
+            <div key={i}>
+              {er === "correct" ? (
+                <GradeIcon variant="contained" color="info"></GradeIcon>
+              ) : (
+                ""
+              )}
+            </div>
+          ))}
+
+          {showConfetti === true && (
+            <Confetti width={window.innerWidth} height={window.innerHeight} />
           )}
         </div>
         <form onSubmit={handleSubmit}>
-          <div style={{ display: "flex", flexWrap: "wrap",marginTop:'20px' }}>
+          <div style={{ display: "flex", flexWrap: "wrap", marginTop: "20px" }}>
             {problems.map((pr, i) => (
               <div
                 key={i}
                 style={{
-                  background:errors[i] === "correct" ? '#F4FFF0' : 'white' ,
+                  background: errors[i] === "correct" ? "#F4FFF0" : "white",
                 }}
                 className="problem"
               >
-                
-               
-               <div  style={{ display: "flex",justifyContent: 'space-around' }}>
-               <div style={{ alignSelf: 'end' }}>+</div>
-               <div>
-                  <div>{pr.top}</div>
-                  <div>{pr.bottom}</div>
+                <div
+                  style={{ display: "flex", justifyContent: "space-around" }}
+                >
+                  <div style={{ alignSelf: "end" }}>+</div>
+                  <div>
+                    <div>{pr.top}</div>
+                    <div>{pr.bottom}</div>
+                  </div>
                 </div>
-               </div>
                 <hr />
-                <TextField 
-                className="text-field"
+                <TextField
+                  className="text-field"
                   value={userInputs[i].userAnswer}
-                  autoComplete="off" 
+                  autoComplete="off"
                   onChange={(e) => handleInputChange(e, i)}
                   onBlur={(e) => handleInputBlur(e, i)}
-                  error={errors[i] === "error" || errors[i] === "incorrect" ? true :false}
-                  style={{ textAlign: 'center', }}
-                  variant="outlined" />
+                  error={
+                    errors[i] === "error" || errors[i] === "incorrect"
+                      ? true
+                      : false
+                  }
+                  style={{ textAlign: "center" }}
+                  variant="outlined"
+                />
                 <br />
-                <div style={{ margin: "5px 0 0 0",textAlign: 'center', }}>
+                <div style={{ margin: "5px 0 0 0", textAlign: "center" }}>
                   {errors[i] === "incorrect" && (
                     <CancelIcon color="error"></CancelIcon>
                   )}
