@@ -1,3 +1,7 @@
+body{
+  font-size: 16px;
+  font-weight: bold;
+}
 .App {
   text-align: center;
 }
@@ -12,7 +16,22 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+.main-div{
+  margin: 10px 20px 10px 10px; min-width: 50px;
+}
+.text-field{
+  width: 60px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+}
+.problem{
+  border: 1px solid black;
+  padding: 15px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
+input{border: 1px solid #000;}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
