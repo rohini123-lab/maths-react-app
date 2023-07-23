@@ -1,7 +1,7 @@
 import "./App.css";
 import "./index.css";
-import { Routes, Route } from "react-router-dom";
-import { Container } from "@mui/material";
+import { Routes, Route ,Link} from "react-router-dom";
+import { Container,Button } from "@mui/material";
 import { lazy, Suspense } from "react";
 
 
@@ -12,11 +12,17 @@ const Substraction = lazy(() => import("./Components/Substraction"));
 
 function App() {
 
-  
+
   return (
     <>
       <Container>
-    
+      <Link
+            to='/'
+          >
+            <Button variant="contained" color="primary">
+              HOME
+            </Button>
+          </Link>
         <Suspense fallback={<div className="container">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />

@@ -63,10 +63,19 @@ function Addition() {
   const handleInputBlur = (event, index) => {
     const { top, bottom } = problems[index];
     const ans = top + bottom;
-    if (ans === parseInt(userInputs[index].userAnswer)) {
-      } else {
+    const userAnswer = parseInt(userInputs[index].userAnswer);
+
+    if (userAnswer === ans) {
+      const newErrors = [...errors];
+      newErrors[index] = "correct";
+      setErrors(newErrors);
+    } else {
+      const newErrors = [...errors];
+      newErrors[index] = "incorrect";
+      setErrors(newErrors);
     }
   };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const validationErrors = validateForm();
@@ -98,17 +107,23 @@ function Addition() {
   };
   useEffect(() => {
     const allProblemsSolved =
-      errors.length >= 1 &&
+      (errors.length >= 1 &&
       errors.every((error) => {
         console.log(error);
         return error === "correct";
-      });
+      }));
 
     console.log("allProblemsSolved", allProblemsSolved);
-    setShowConfetti(allProblemsSolved);
-    setTimeout(()=>{
-      setShowConfetti(false)
-    },3000)
+    if(allProblemsSolved){
+      setShowConfetti(allProblemsSolved);
+      setTimeout(()=>{
+        setShowConfetti(false)
+      },3000);
+    }else{
+      setShowConfetti(false);
+    }
+   
+
   }, [errors]);
 
   return (
@@ -155,8 +170,8 @@ function Addition() {
                 >
                   <div style={{ alignSelf: "end" }}>+</div>
                   <div>
-                    <div>{pr.top}</div>
-                    <div>{pr.bottom}</div>
+                    <div style={{textAlign:'right'}}>{pr.top}</div>
+                    <div style={{textAlign:'right'}}>{pr.bottom}</div>
                   </div>
                 </div>
                 <hr />

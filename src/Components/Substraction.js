@@ -55,15 +55,19 @@ function Substraction() {
   const handleInputBlur = (event, index) => {
     const { top, bottom } = problems[index];
     const ans = top - bottom;
-    console.log("ans", ans);
-    if (ans === parseInt(userInputs[index].userAnswer)) {
-      console.log("correct answer");
-    } else {
-      console.log("wrong answer");
-    }
-    // }
-  };
+    const userAnswer = parseInt(userInputs[index].userAnswer);
 
+    if (userAnswer === ans) {
+      const newErrors = [...errors];
+      newErrors[index] = "correct";
+      setErrors(newErrors);
+    } else {
+      const newErrors = [...errors];
+      newErrors[index] = "incorrect";
+      setErrors(newErrors);
+    }
+  };
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const validationErrors = validateForm();
@@ -113,7 +117,7 @@ function Substraction() {
         <h2>Subtraction</h2>
         <Button
           variant="outlined"
-          color="primary"
+          color="secondary"
           size="large"
           onClick={() => navigate(-1)}
         >
@@ -150,8 +154,8 @@ function Substraction() {
                 >
                   <div style={{ alignSelf: "end" }}>-</div>
                   <div>
-                    <div>{pr.top}</div>
-                    <div>{pr.bottom}</div>
+                    <div style={{textAlign:'right'}}>{pr.top}</div>
+                    <div style={{textAlign:'right'}}>{pr.bottom}</div>
                   </div>
                 </div>
                 <hr />
@@ -189,7 +193,7 @@ function Substraction() {
             <Button
               variant="contained"
               size="large"
-              color="primary"
+              color="secondary"
               type="submit"
             >
               Submit
